@@ -1,0 +1,151 @@
+.container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    overflow: auto;
+    background-color: #215DA1;
+    background: url('/images/login-bg.png') no-repeat;
+    background-size: cover;
+
+    .login-form{
+        position: relative;
+        width: 60%;
+        display: flex;
+        padding: 24px 0;
+
+        .form-left{
+            position: relative;
+            display: flex;
+            width: 50%;
+            flex-direction: column;
+            background-color: #E0F0FF;
+            padding: 24px 28px;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+
+            .logo{
+                position: relative;
+                display: flex;
+                align-items: center;
+                color: #333D47;
+                font-weight: 600;
+                font-size: 18px;
+                height: 40px;
+                flex-shrink: 0;
+
+                img{
+                    position: relative;
+                    width: 40px;
+                    margin-right: 6px;
+                }
+            }
+
+            .display-img{
+                position: relative;
+                display: flex;
+                flex-grow: 1;
+                align-items: center;
+                justify-content: center;
+                padding-top: 70px;
+
+                img{
+                    position: relative;
+                    width: 80%;
+                }
+            }
+        }
+
+        .form-right{
+            position: relative;
+            display: flex;
+            width: 50%;
+            flex-direction: column;
+            background-color: #fff;
+            padding: 50px 40px;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+
+            .h2{
+                position: relative;
+                color: #333D47;
+                font-size: 24px;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+
+            .h3{
+                position: relative;
+                color: #718599;
+                font-size: 14px;
+            }
+
+            .form{
+                position: relative;
+                display: flex;
+                flex-grow: 1;
+                margin-top: 24px;
+
+                form{
+                    width: 100%;
+                }
+
+                .getCode{
+                    position: relative;
+                    cursor: pointer;
+                    font-size: 12px;
+                    user-select: none;
+                }
+
+                button{
+                    width: 100%;
+                    background-color: #0A7CFF;
+                    border-color: #0A7CFF;
+                }
+            }
+
+            .footer{
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .item{
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    font-size: 12px;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin: 0 2px;
+                    color: #718599;
+
+                    &:hover{
+                        background-color: #e7f5ff;;
+                    }
+
+                    .img{
+                        width: 32px;
+                        height: 32px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: #718699;
+                        border-radius: 50%;
+                        margin-bottom: 4px;
+
+                        img{
+                            width: 20px;
+                            padding-top: 2px;
+                            vertical-align: middle;
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+}

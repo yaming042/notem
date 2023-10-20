@@ -1,0 +1,105 @@
+.container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .search-form{
+        position: relative;
+        display: flex;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #F0F2F4;
+
+        form{
+            width: 100%;
+        }
+    }
+
+    .operate{
+        position: relative;
+        // border-top: 1px solid #F0F2F4;
+        padding: 8px 0;
+        display: flex;
+        justify-content: flex-end;
+
+        button{
+            margin: 0 2px;
+        }
+    }
+
+    .list{
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-grow: 1;
+
+        .list-content{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            .table-content{
+                position: relative;
+                display: flex;
+                flex-grow: 1;
+                overflow: hidden;
+
+                .table{
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    border-top: 1px solid #F0F2F4;
+
+                    :global .cell{
+                        font-size: 12px;
+                    }
+
+                    .table-ope{
+                        position: relative;
+
+                        span{
+                            cursor: pointer;
+                            color: #0A7CFF;
+                            margin-right: 8px;
+
+                            &:last-child{
+                                margin-right: 0;
+                            }
+                        }
+                    }
+
+                    .opt-td-btn{
+                        position: relative;
+
+                        button{
+                            margin: 0 6px;
+                        }
+                    }
+                }
+            }
+
+            .pagination{
+                position: relative;
+                display: flex;
+                height: 60px;
+                flex-shrink: 0;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
+
+.submit{
+    position: relative;
+    margin-top: 24px;
+    text-align: right;
+
+    button{
+        margin-left: 12px;
+    }
+}
