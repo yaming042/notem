@@ -17,7 +17,7 @@ const NoteEditor = lazy(() => import('@/Pages/NoteEditor'));
 
 function App(props) {
     const initState = () => ({
-            loading: true,
+            loading: false,
             errorMsg: '',
         }),
         [state, setState] = useState(initState),
@@ -25,7 +25,7 @@ function App(props) {
 
     // 校验用户状态，有效就返回用户信息及权限；无效则去登录
     const validate = () => {
-        request(VALIDATE).then(response => {
+        request('/api/gh/user').then(response => {
             if(response?.code === 0) {
                 let result = response?.data || {};
                 // 记录用户信息
@@ -46,7 +46,7 @@ function App(props) {
 
     // 这是入口文件，页面间切换不会触发，只有应用首次加载时才会触发
     useEffect(() => {
-        validate();
+        // validate();
     }, []);
 
     return (

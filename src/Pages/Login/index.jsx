@@ -8,7 +8,7 @@ import MobileImage from '@/assets/mobile_login.png';
 import {SUBMIT_LOGIN, VALIDATE, SEND_CAPTCHA, SUBMIT_LOGIN_PHONE, GET_AUTHOR_TOKEN} from '@/config/url';
 import request from '@/utils/request';
 import Cookies from 'js-cookie';
-import {mobileReg} from '@/utils';
+import {mobileReg, getParameterByName} from '@/utils';
 
 // 账号登录表单
 import AccountForm from './AccountLogin';
@@ -24,25 +24,37 @@ export default (props) => {
         [state, setState] = useState(initState);
 
     const toLogin = () => {
-        let appKey = 'SVbKFCPzGzDDAfEZMcciMak9DPmLu0DX';
-        let redirect_uri = 'oob';
-        let appId = '41419500';
-        let url = `http://openapi.baidu.com/oauth/2.0/authorize?response_type=code&client_id=${appKey}&redirect_uri=${redirect_uri}&scope=basic,netdisk&device_id=${appId}`
+        let client_id = '18c2c94ee9c6ceb11646',
+            redirect_uri = 'http://localhost:5713/login',
+            scope = encodeURIComponent('repo user'),
+            sta = 'lo98w0er4',
+            url = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}&state=${sta}`
 
-        window.open(url)
+        location.href = url;
+        // window.open(url, '_blank', 'height=300,width=600');
     };
 
     const getToken = () => {
         let {code} = state;
 
         if(code) {
-            request(`${GET_AUTHOR_TOKEN}?code=${code}`).then(response => {
+            let client_id = '18c2c94ee9c6ceb11646',
+                client_secret = 'f3714a4cb1c017a2e37218442213a4dd506cf2e2',
+                query = encodeURIComponent(`client_id=${client_id}&client_secret=${client_secret}&code=${code}`),
+                url = `https://github.com/login/oauth/access_token?${query}`;
+                
+            request(`/api/gh/authorize?code=${code}`).then(response => {
                 console.log(response)
             }).catch(e => {
                 console.log(e);
             });
         }
     };
+
+    useEffect(() => {
+        let code = getParameterByName('code');
+        code && setState(o => ({...o, code}));
+    }, [])
 
     return (
         <div className={styles['container']}>
@@ -60,11 +72,10 @@ export default (props) => {
                     <div className={styles['h2']}>欢迎使用</div>
                     <div className={styles['h3']}>我的笔记</div>
                     <div className={styles['form']}>
-                        <Button onClick={toLogin}>去登录</Button>
-
-                        <Input placeholder='填入code' onChange={e => setState(o => ({...o, code: e.target.value}))}/>
-                        <Button onClick={getToken}>获取token</Button>
+                        <Button type="primary" onClick={toLogin}>GitHub登录</Button>
                     </div>
+
+                    {state.code ? <Button type="primary" onClick={getToken}>获取token</Button> : null}
                 </div>
             </div>
         </div>

@@ -13,6 +13,8 @@ export const VALIDATE = `/api/bdyp/validate`;
 export const GET_AUTHOR_TOKEN = `/api/bdyp/token`;
 export const QUERY_FILE_LIST = `/api/bdyp/list`;
 export const NEW_DIR = `/api/bdyp/newdir`;
+export const QUERY_DOC_LIST = `/api/bdyp/doclist`;
+export const QUERY_DOC_INFO = `/api/bdyp/docinfo`;
 
 // 接口
 // 登录

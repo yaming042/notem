@@ -15,7 +15,7 @@ const HeaderBar = (props) => {
     const history = useHistory();
 
     const accountDropdownItems = () => {
-        let name = userInfo?.baidu_name || '',
+        let name = userInfo?.login || '',
             char = name.charAt().toUpperCase();
 
         return [
