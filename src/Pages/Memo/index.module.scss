@@ -1,5 +1,6 @@
 .container{
     position: relative;
+    height: 100%;
 
     .new{
         margin-bottom: 12px;
@@ -24,6 +25,14 @@
             padding: 12px;
             border-radius: 6px;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+
+            .icon{
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
 
             .header{
                 position: relative;
@@ -33,10 +42,14 @@
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
+                font-size: 14px;
             }
 
             .body{
                 position: relative;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
 
                 .time{
                     position: relative;
@@ -53,11 +66,35 @@
                     display: -webkit-box;
                     -webkit-line-clamp: 4;
                     -webkit-box-orient: vertical;
+                    font-size: 14px;
+                }
+            }
+
+            .opt-btn{
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                padding-top: 12px;
+                border-top: 1px solid #ececec;
+                margin-top: 12px;
+
+                button{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 4px 10px;
+                    height: 28px;
+                    font-size: 12px;
+
+                    img{
+                        margin-right: 4px;
+                    }
                 }
             }
 
             &:hover{
-                background-color: #F5FBFF;
+                background-color: #F3FFF7;
             }
         }
 

@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
-import { Dropdown, Badge, Button, message} from 'antd';
-import { LogoutOutlined, UserOutlined, LockOutlined, BellOutlined } from '@ant-design/icons';
-import { ACCOUNT, LOGOUT, LOGIN } from '@/config/url';
+import { Dropdown, Badge, message} from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+import { LOGOUT, HOME } from '@/config/url';
 import request from '@/utils/request';
-import ResetPwd from './ResetPwd';
 import styles from './index.module.scss';
 
 
 const HeaderBar = (props) => {
     const [userInfo, setUserInfo] = useState({});
-    const [pwdOpen, setPwdOpen] = useState(false);
-    const history = useHistory();
 
     const accountDropdownItems = () => {
         let name = userInfo?.login || '',
@@ -35,20 +31,6 @@ const HeaderBar = (props) => {
                 type: 'divider'
             },
             {
-                key: 'account',
-                label: (<div className={styles['menu-item-content']}>
-                    <UserOutlined />
-                    个人中心
-                </div>),
-            },
-            {
-                key: 'resetPwd',
-                label: (<div className={styles['menu-item-content']}>
-                    <LockOutlined />
-                    重置密码
-                </div>),
-            },
-            {
                 key: 'logout',
                 label: (<div className={styles['menu-item-content']}>
                     <LogoutOutlined />
@@ -61,7 +43,7 @@ const HeaderBar = (props) => {
     const logout = () => {
         request(LOGOUT).then(response => {
             if(response?.code === '-2') {
-                window.location.href = LOGIN;
+                window.location.href = HOME;
             }else{
                 message.error(response?.message || '退出失败')
             }
@@ -69,13 +51,8 @@ const HeaderBar = (props) => {
     }
 
     const accountMenuClick = ({key}) => {
-        if('account' === key){
-            history.push(ACCOUNT);
-        }else if('logout' === key){
-            console.log(`退出登录`);
+        if('logout' === key){
             logout();
-        }else if('resetPwd' === key) {
-            setPwdOpen(true);
         }
     };
 
@@ -111,14 +88,6 @@ const HeaderBar = (props) => {
                     </Dropdown>
                 </div>
             </div>
-
-
-            <ResetPwd
-                open={pwdOpen}
-                userInfo={userInfo}
-                onCancel={() => setPwdOpen(false)}
-                onOk={() => {location.href = LOGIN}}
-            />
         </div>
     );
 };

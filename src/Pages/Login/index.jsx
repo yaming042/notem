@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, message } from 'antd';
-import { useHistory } from 'react-router-dom';
-import { UserOutlined, LockOutlined, MobileOutlined, MessageOutlined } from '@ant-design/icons';
-import AccountImage from '@/assets/account_login.png';
-import WxImage from '@/assets/wx_login.png';
-import MobileImage from '@/assets/mobile_login.png';
-import {SUBMIT_LOGIN, VALIDATE, SEND_CAPTCHA, SUBMIT_LOGIN_PHONE, GET_AUTHOR_TOKEN} from '@/config/url';
+import { Button } from 'antd';
 import request from '@/utils/request';
-import Cookies from 'js-cookie';
-import {mobileReg, getParameterByName} from '@/utils';
-
-// 账号登录表单
-import AccountForm from './AccountLogin';
-// 手机验证码登录表单
+import {getParameterByName} from '@/utils';
 
 import styles from './index.module.scss';
 

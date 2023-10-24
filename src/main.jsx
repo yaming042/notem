@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         locale={zhCN}
         theme={{
             token: {
-                colorPrimary: '#007BFF',
+                colorPrimary: '#0AC266',
             },
             components: {
                 Menu: {

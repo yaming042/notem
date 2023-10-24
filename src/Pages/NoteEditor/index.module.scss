@@ -13,4 +13,35 @@
     .note-editor-content{
         position: relative;
     }
+
+    .base-info{
+        position: relative;
+        margin: 24px 0;
+
+        .title{
+            position: relative;
+        }
+        .abstract{
+            position: relative;
+        }
+        .tags{
+            position: relative;
+        }
+        .author{
+            position: relative;
+        }
+
+        .list{
+            position: relative;
+
+            &>div{
+                margin: 12px 0;
+            }
+        }
+    }
+
+    .submit{
+        position: relative;
+        padding: 24px 0;
+    }
 }

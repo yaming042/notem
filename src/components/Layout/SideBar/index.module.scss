@@ -35,16 +35,49 @@
                 cursor: pointer;
                 border-radius: 6px;
                 font-size: 14px;
+                margin: 2px 0;
 
                 &:hover:not(:global(.active)) {
-                    background-color: #efefef;
+                    background-color: #0AC266;
+
+                    a{
+                        color: #fff;
+
+                        svg path{
+                            fill: #fff;
+                        }
+                    }
                 }
                 &:global(.active){
-                    background-color: #efefef;
+                    background-color: #0AC266;
+
+                    a{
+                        color: #fff;
+
+                        svg path{
+                            fill: #fff;
+                        }
+                    }
                 }
 
                 a{
                     color: #333;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+
+                    &>svg{
+                        width: 18px;
+                        height: 18px;
+                        margin-right: 4px;
+                    }
+
+                    &:global(.favorites), &:global(.scratch){
+                        svg{
+                            width: 16px;
+                            margin-right: 6px;
+                        }
+                    }
                 }
 
                 .icon{

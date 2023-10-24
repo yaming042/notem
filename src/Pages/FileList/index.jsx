@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Table, Modal, Button, Dropdown, Tooltip, Tag, Input, message} from "antd";
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, ExclamationCircleOutlined,  MoreOutlined
+import { DeleteOutlined, EditOutlined, PlusOutlined, ExclamationCircleOutlined,  MoreOutlined
 } from '@ant-design/icons';
 import FilterForm from "@/components/FilterForm";
 import { paginationConfig } from "@/config";
-import { QUERY_QUOTATION_LIST_PAGE } from "@/config/url";
+import { EDITOR, QUERY_FILE_LIST } from "@/config/url";
 import request from '@/utils/request';
-import {STATUS} from './config';
 import styles from './index.module.scss';
 
 export default () => {
     const initState = () => ({
             listData: [],
+            listDataBak: [],
             loading: false,
             currentItem: {},
+            type: location.pathname.substring(1),
 
 
             pageNo: 1,
@@ -25,36 +26,32 @@ export default () => {
         [modal, contextHolder] = Modal.useModal(),
         history = useHistory();
 
-    const getListData = (option={}) => {
+    // 请求列表数据
+    const getListData = (type='') => {
         setState(o => ({...o, loading: true}));
 
-        let defaultData = {
-            projectName: '',
-            status: '',
-            pageNo: 1,
-            pageSize: 10,
-        };
-
-        request(QUERY_QUOTATION_LIST_PAGE, {data: {...defaultData, ...option}}).then(response => {
+        request(QUERY_FILE_LIST, {data: {type: type || state.type}}).then(response => {
             setState(o => ({...o, loading: false}));
-            if(response?.code === '0') {
-                let obj = response?.data || {};
+            if(0 === response?.code) {
+                let obj = response?.data || [];
 
-                setState(o => ({...o, total: obj?.total || 0, listData: [{id:1, name:'汤姆', dept:'研发项目组', email:'tom***@qq.com', mobile:'132****2533', create_time:'2020-12-12 12:12:12', update_time:'2020-12-12 12:12:12', status:1}]}))
+                setState(o => ({
+                    ...o,
+                    total: obj?.length || 0,
+                    listData: (obj || []).slice(0),
+                    listDataBak: (obj || []).slice(0),
+                }));
             }
         }).catch(e => {
             setState(o => ({...o, loading: false}));
         });
     };
+    // 表格列
     const columns = () => {
         return ([
             {
-                title: 'ID',
-                dataIndex: 'id',
-            },
-            {
-                title: '用户名',
-                dataIndex: 'name',
+                title: '标题',
+                dataIndex: 'title',
                 ellipsis: {
                     showTitle: false,
                 },
@@ -65,8 +62,8 @@ export default () => {
                 ),
             },
             {
-                title: '部门',
-                dataIndex: 'dept',
+                title: '摘要',
+                dataIndex: 'abstract',
                 ellipsis: {
                     showTitle: false,
                 },
@@ -77,8 +74,8 @@ export default () => {
                 ),
             },
             {
-                title: '邮箱',
-                dataIndex: 'email',
+                title: '标签',
+                dataIndex: 'tags',
                 ellipsis: {
                     showTitle: false,
                 },
@@ -89,8 +86,8 @@ export default () => {
                 ),
             },
             {
-                title: '手机号',
-                dataIndex: 'mobile',
+                title: '创建人',
+                dataIndex: 'author',
                 ellipsis: {
                     showTitle: false,
                 },
@@ -99,14 +96,10 @@ export default () => {
                         {text}
                     </Tooltip>
                 ),
-            },
-            {
-                title: '状态',
-                dataIndex: 'status',
             },
             {
                 title: '创建时间',
-                dataIndex: 'create_time',
+                dataIndex: 'created_at',
                 width: 180,
                 /*
                     Safari 下 new Date('2020-11-16 12:12:12').getTime()会返回NaN
@@ -121,7 +114,7 @@ export default () => {
             },
             {
                 title: '更新时间',
-                dataIndex: 'update_time',
+                dataIndex: 'updated_at',
                 width: 180,
                 sorter: (a, b) => {
                     return (
@@ -162,7 +155,12 @@ export default () => {
             },
         ])
     }
-
+    // 新建稿件
+    const newNote = () => {
+        let {type} = state;
+        history.push(`${EDITOR}?type=${type}`);
+    };
+    // 请求接口删除
     const confirmDelete = (row) => {
         return new Promise((resolve, reject) => {
             let t = setTimeout(() => {
@@ -172,6 +170,7 @@ export default () => {
             }, 3000)
         });
     }
+    // 删除二次确认
     const checkDelete = (record, e) => {
         e.stopPropagation();
 
@@ -185,12 +184,11 @@ export default () => {
             autoFocusButton: null,
         });
     }
+    // 编辑条目
     const editItem = (record, e) => {
         e.stopPropagation();
     };
-
-
-
+    // 表格操作项
     const menuClick = (record, {key, domEvent}) => {
         domEvent?.stopPropagation();
 
@@ -201,19 +199,47 @@ export default () => {
 
         getListData({pageNo: page, pageSize});
     }
-
+    // 取消搜索
     const onCancelSearch = () => {
-        setState(o => ({...o, pageNo: 1}));
-        getListData({pageNo: 1});
+        let {listDataBak} = state;
+
+        setState(o => ({...o, pageNo: 1, listData: listDataBak.slice(0), total: listDataBak.length}));
     };
+    // 开始搜索
     const onOkSearch = (options={}) => {
-        setState(o => ({...o, pageNo: 1}));
-        getListData({...options, pageNo: 1});
+        let {listDataBak} = state,
+            keyword = options.keyword || '',
+            btime = options.btime || '',
+            etime = options.etime || '',
+            listData = (listDataBak || []).filter(item => {
+                if(!keyword) return true;
+
+                return (item.title || '').indexOf(keyword) !== -1 || (item.abstract || '').indexOf(keyword) !== -1;
+            }).filter(item => {
+                let time = +new Date(item.created_at);
+
+                if(btime && etime) {
+                    return (+new Date(btime)) <= time && time <= (+new Date(etime));
+                }
+
+                return true;
+            });
+
+        setState(o => ({...o, pageNo: 1, listData, total: listData.length}));
     };
 
     // didMount生命周期
     useEffect(() => {
         getListData();
+
+        let unListen = history.listen((params) => {
+            let type = params.pathname.substring(1);
+            getListData(type);
+        });
+
+        return () => {
+            unListen();
+        }
     }, []);
 
     return (
@@ -221,24 +247,27 @@ export default () => {
             <div className={styles['search-form']}>
                 <FilterForm
                     formItems={[
-                        {name: 'projectName', label: '项目名称', placeholder: '输入项目名称搜索', type: 'input'},
-                        {name: 'createTime', label: '创建时间', type: 'rangePicker', format: 'YYYY-MM-DD HH:mm:ss', formField: ['createTimeStart', 'createTimeEnd']},
-                        {name: 'clientName', label: '客户名', placeholder: '输入客户名搜索', type: 'input'},
-                        {name: 'status', label: '状态', placeholder: '选择状态搜索', type: 'select', options: STATUS},
+                        {name: 'keyword', label: '关键字', placeholder: '输入关键字(标题、摘要)搜索', type: 'input'},
+                        {name: 'created_at', label: '创建时间', type: 'rangePicker', format: 'YYYY-MM-DD HH:mm:ss', formField: ['btime', 'etime']},
                     ]}
                     onReset={onCancelSearch}
                     onConfirm={onOkSearch}
                 />
             </div>
-            <div className={styles['operate']}>
-                <Button
-                    type="primary"
-                    onClick={() => {}}
-                    icon={<PlusCircleOutlined />}
-                >
-                    新增笔记
-                </Button>
-            </div>
+            {
+                state.type === 'trash' ?
+                    null
+                    :
+                    <div className={styles['operate']}>
+                        <Button
+                            type="primary"
+                            onClick={newNote}
+                            icon={<PlusOutlined />}
+                        >
+                            新建稿件
+                        </Button>
+                    </div>
+            }
             <div className={styles['list']}>
                 <div className={styles['list-content']}>
                     <div className={styles['table-content']}>
@@ -246,6 +275,7 @@ export default () => {
                             <Table
                                 style={{ width: '100%' }}
                                 columns={columns()}
+                                size="small"
                                 dataSource={ state.listData || [] }
                                 rowKey={i => i.id}
                                 pagination={{
@@ -264,6 +294,8 @@ export default () => {
                     </div>
                 </div>
             </div>
+
+            {contextHolder}
         </div>
     );
 }
