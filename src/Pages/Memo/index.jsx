@@ -245,6 +245,12 @@ export default () => {
                     })
                 }
 
+                {
+                    !state.loading && (state.listData || []).length === 0 ?
+                        <p className={styles['empty']}>便签空空如也~</p>
+                        :
+                        null
+                }
             </div>
 
             {contextHolder}

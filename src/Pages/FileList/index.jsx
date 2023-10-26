@@ -234,7 +234,9 @@ export default () => {
 
         let unListen = history.listen((params) => {
             let type = params.pathname.substring(1);
-            getListData(type);
+            if(type !== 'scratch') {
+                getListData(type);
+            }
         });
 
         return () => {

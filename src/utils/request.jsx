@@ -2,7 +2,6 @@ import axios from 'axios';
 import qs from 'qs';
 import { message } from 'antd';
 import {LOGIN} from '@/config/url';
-import Cookies from 'js-cookie';
 
 export default function request(url, options = {}) {
     let CancelToken = axios.CancelToken,
@@ -42,17 +41,7 @@ export default function request(url, options = {}) {
                 if(200 === responseStatus) {
                     if(code !== 0 && typeof data !== 'string') {
                         source.cancel(`请重新登录`);
-                        if(code === -2){ // 登录信息过期或身份未认证，如果已经是login页那就不用跳了
-                            if(location.pathname != LOGIN) {
-                                // 未登录，且不是登录页，就跳转到登录页
-                                // return window.location.href = `${LOGIN}?redirect=${encodeURIComponent(location.href)}`;
-                                Cookies.remove('userId');
-                                return window.location.href = LOGIN;
-                            }else{
-                                // 已经是登录页了，就不做任何处理
-                                return reject(data);
-                            }
-                        }else{
+                        if(code === -1){
                             message.error(msg || '异常');
                         }
 

@@ -11,7 +11,7 @@ const HeaderBar = (props) => {
     const [userInfo, setUserInfo] = useState({});
 
     const accountDropdownItems = () => {
-        let name = userInfo?.login || '',
+        let name = userInfo?.name || userInfo?.login || '',
             char = name.charAt().toUpperCase();
 
         return [
@@ -21,7 +21,7 @@ const HeaderBar = (props) => {
                 label: (<div className={styles['user-name']}>
                     <span>
                         {
-                            userInfo?.avatar_url ? <img src={userInfo?.avatar_url || ''} />:char
+                            userInfo?.avatar_url ? <img src={userInfo?.avatar_url || ''} /> : char
                         }
                     </span>
                     <div>{name}</div>
@@ -42,8 +42,8 @@ const HeaderBar = (props) => {
 
     const logout = () => {
         request(LOGOUT).then(response => {
-            if(response?.code === '-2') {
-                window.location.href = HOME;
+            if(response?.code === 0) {
+                location.href = BASEDIR || '/';
             }else{
                 message.error(response?.message || '退出失败')
             }
@@ -81,7 +81,7 @@ const HeaderBar = (props) => {
                                     userInfo?.avatar_url ?
                                         <img src={userInfo?.avatar_url || ''} />
                                         :
-                                        (userInfo?.baidu_name || '').charAt().toUpperCase()
+                                        (userInfo?.name || userInfo?.login || '').charAt().toUpperCase()
                                 }
                             </div>
                         </Badge>

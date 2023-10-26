@@ -20,13 +20,6 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
             react(),
             svgr(),
-            createHtmlPlugin({
-                inject: {
-                    data: {
-                        title: 'vite 测试',
-                    },
-                },
-            })
         ],
         server: {
             host: '0.0.0.0',
@@ -40,6 +33,7 @@ export default defineConfig(({ command, mode }) => {
         },
         define: {
             BASEDIR: JSON.stringify(env.VITE_BASEDIR),
+            GH_CLIENT_ID: JSON.stringify(env.VITE_GH_CLIENT_ID),
         },
     });
 });

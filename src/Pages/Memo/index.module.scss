@@ -98,13 +98,12 @@
             }
         }
 
-        .test{
-            display: flex;
-            flex-direction: column;
-
-            button{
-                margin: 6px 0;
-            }
+        .empty{
+            text-align: center;
+            width: 100%;
+            color: #ccc;
+            letter-spacing: 4px;
+            padding-top: 4%;
         }
     }
 }
