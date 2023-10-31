@@ -1,5 +1,5 @@
 import { deepCopy } from "@/utils";
-import routers from './router';
+// import routers from './router';
 
 // 辅助函数 ===== begin
 // 为菜单数据增加key字段
@@ -58,13 +58,6 @@ const getRenderRouterData = (treeArray = [], parentId = null) => {
     return flatArray;
 };
 // 辅助函数 ===== end
-
-
-const menuConfig = mapMenuWithKey(routers);
-// 菜单需要的数据
-export const menuArray = getSideMenuData(menuConfig.slice(0));
-// 路由需要的数据
-export const routerArray = getRenderRouterData(menuConfig.slice(0));
 
 // 分页基本配置
 export const paginationConfig = {
