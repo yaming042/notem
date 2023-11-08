@@ -15,6 +15,21 @@ const FileList = lazy(() => import('@/Pages/FileList'));
 const NotFound = lazy(() => import('@/Pages/NotFound'));
 const NoteEditor = lazy(() => import('@/Pages/NoteEditor'));
 
+const PrivateRoute = (props) => {
+    const hasLogin = props.hasLogin || false;
+
+    return (
+        <>
+            {
+                hasLogin ?
+                    <Route {...props} />
+                    :
+                    <Redirect to={`${BASEDIR}/login`} />
+            }
+        </>
+    );
+};
+
 function App(props) {
     const initState = () => ({
             loading: location.pathname !== `${BASEDIR}/login`,
@@ -28,13 +43,7 @@ function App(props) {
         dispatch = props.dispatch;
 
     const delayToHome = () => {
-        setState(o => ({...o, errorMsg: `应用异常，即将跳转至登录页`}));
-
-        let t = setTimeout(() => {
-            clearTimeout(t);
-
-            location.href = `${BASEDIR}/login`;
-        }, 1500);
+        setState(o => ({...o, hasLogin: false, loading: false, showRepo: false, errorMsg: `应用异常，即将跳转至登录页`}));
     }
 
     const newRepo = () => {
@@ -76,7 +85,8 @@ function App(props) {
                     value: result
                 });
 
-                result?.login && Cookies.set('owner', result.login, {expires: 7});
+                setState(o => ({...o, hasLogin: true}))
+                result?.login && Cookies.set('owner', result.login, {expires: 30});
             }else{
                 delayToHome();
                 return;
@@ -107,12 +117,12 @@ function App(props) {
                     <Suspense fallback={<SuspenseLoading/>}>
                         <Switch>
                             <Route exact path={`${BASEDIR}/login`} component={Login} />
-                            <Route exact path={`${BASEDIR}/scratch`} component={Memo} />
-                            <Route exact path={`${BASEDIR}/notes`} component={FileList} />
-                            <Route exact path={`${BASEDIR}/favorites`} component={FileList} />
-                            <Route exact path={`${BASEDIR}/trash`} component={FileList} />
+                            <PrivateRoute hasLogin={state.hasLogin} exact path={`${BASEDIR}/scratch`} component={Memo} />
+                            <PrivateRoute hasLogin={state.hasLogin} exact path={`${BASEDIR}/notes`} component={FileList} />
+                            <PrivateRoute hasLogin={state.hasLogin} exact path={`${BASEDIR}/favorites`} component={FileList} />
+                            <PrivateRoute hasLogin={state.hasLogin} exact path={`${BASEDIR}/trash`} component={FileList} />
 
-                            <Route exact path={`${BASEDIR}/editor`} component={NoteEditor} />
+                            <PrivateRoute hasLogin={state.hasLogin} exact path={`${BASEDIR}/editor`} component={NoteEditor} />
                             <Redirect from={BASEDIR || '/'} to={`${BASEDIR}/scratch`} />
 
                             <Route component={NotFound} />
